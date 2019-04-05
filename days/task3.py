@@ -8,8 +8,7 @@ class Day3(AOCDay):
     def __init__(self):
         super().__init__()
         self.day = 3
-        self.input_link = self.input_link.format(day=self.day)
-        self.input_data = self.download_input(self.input_link)
+        self.input_data = self.load_input(self.day)
 
     def main1(self):
         params = []

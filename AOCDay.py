@@ -29,6 +29,11 @@ class AOCDay:
         if part == '2':
             return self.main2()
 
+    def split_input(self, data):
+        lines = data.split('\n')
+        # remove trailing newline
+        return lines[:len(lines) - 1]
+
     def download_input(self, url):
         try:
             SESSION_KEY = os.environ['adventofcode-session']
@@ -37,13 +42,27 @@ class AOCDay:
             sys.exit(1)
         with requests.get(url, cookies={"session": SESSION_KEY}) as response:
             if response.ok:
-                lines = response.text.split('\n')
-                # remove trailing newline
                 print('Input downloaded.')
-                return lines[:len(lines)-1]
+                return self.split_input(response.text)
             else:
                 print('Please check session variable "adventofcode-session".')
                 print(response.reason, response.status_code)
                 sys.exit(1)
 
+    def load_input(self, day):
+        here = os.path.abspath(os.path.dirname(__file__))
+        local_input = os.path.join(here, 'data', str(day), 'input.txt')
+        if os.path.isfile(local_input):
+            return self.read_input(local_input)
+        input_content = self.download_input(self.input_link.format(day=day))
+        os.makedirs(os.path.dirname(local_input), exist_ok=True)
+        with open(local_input, 'w') as f:
+            for line in input_content:
+                f.write('{line}\n'.format(line=line))
+        return input_content
 
+
+    def read_input(self, path):
+        with open(path) as f:
+            text = f.read()
+        return self.split_input(text)

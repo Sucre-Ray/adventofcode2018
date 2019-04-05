@@ -33,6 +33,7 @@ def get_day_task(day_number):
         '5': d.Day5,
         '6': d.Day6,
         '7': d.Day7,
+        '8': d.Day8,
     }
     try:
         cls = days[day_number]
